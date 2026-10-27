@@ -48,7 +48,7 @@ export function diagnose({ vehicleId, codes }) {
       steps: (def?.steps ?? []).map((step) => ({ ...step })),
     };
   });
-  causes.sort((a, b) => b.probability - a.probability || (a.id.localeCompare(b.id)));
+  causes.sort((a, b) => b.probability - a.probability || (a.id < b.id ? -1 : a.id > b.id ? 1 : 0));
 
   return {
     vehicle: vehicle.name,
