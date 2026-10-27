@@ -45,7 +45,7 @@ export function diagnose({ vehicleId, codes }) {
       component: def?.component ?? id,
       probability: round(1 - miss),
       codes: causeCodes,
-      steps: def?.steps ?? [],
+      steps: (def?.steps ?? []).map((step) => ({ ...step })),
     };
   });
   causes.sort((a, b) => b.probability - a.probability || (a.id.localeCompare(b.id)));

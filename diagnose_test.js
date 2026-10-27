@@ -91,3 +91,13 @@ test('una causa sin definición en el manual se incluye con el id como respaldo 
     steps: [],
   });
 });
+
+test('modificar el resultado de una llamada no afecta a las siguientes', () => {
+  const base = structuredClone(diagnose({ vehicleId: 'tiggo4-15t', codes: ['P0301'] }));
+  const r = diagnose({ vehicleId: 'tiggo4-15t', codes: ['P0301'] });
+  r.causes[0].steps.push({ text: 'extra', expected: 'extra' });
+  r.causes[0].steps[0].text = 'mutado';
+  r.causes[0].codes.push('X');
+  r.codes[0].description = 'mutado';
+  assert.deepEqual(diagnose({ vehicleId: 'tiggo4-15t', codes: ['P0301'] }), base);
+});
