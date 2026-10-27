@@ -51,8 +51,8 @@ test('las causas salen ordenadas de mayor a menor probabilidad', () => {
 });
 
 test('el resultado no depende del orden de los códigos', () => {
-  const a = diagnose({ vehicleId: 'tiggo4-15t', codes: ['P0300', 'P0301', 'X1'] });
-  const b = diagnose({ vehicleId: 'tiggo4-15t', codes: ['X1', 'P0301', 'P0300'] });
+  const a = diagnose({ vehicleId: 'tiggo4-15t', codes: ['P0300', 'P0301', 'P0420', 'X1'] });
+  const b = diagnose({ vehicleId: 'tiggo4-15t', codes: ['X1', 'P0420', 'P0301', 'P0300'] });
   assert.deepEqual(a, b);
 });
 
@@ -77,4 +77,17 @@ test('las causas se resuelven con el vehículo pedido', () => {
 test('sin códigos devuelve el vehículo y listas vacías', () => {
   const r = diagnose({ vehicleId: 'clio4-15dci', codes: [] });
   assert.deepEqual(r, { vehicle: 'Renault Clio IV 1.5 dCi', codes: [], notFound: [], causes: [] });
+});
+
+test('una causa sin definición en el manual se incluye con el id como respaldo y sin pasos', () => {
+  const r = diagnose({ vehicleId: 'tiggo4-15t', codes: ['P0420'] });
+  const sonda = r.causes.find((c) => c.id === 'sonda-anterior');
+  assert.deepEqual(sonda, {
+    id: 'sonda-anterior',
+    title: 'sonda-anterior',
+    component: 'sonda-anterior',
+    probability: 0.15,
+    codes: ['P0420'],
+    steps: [],
+  });
 });

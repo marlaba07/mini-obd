@@ -36,14 +36,18 @@ export function diagnose({ vehicleId, codes }) {
     }
   }
 
-  const causes = [...byCause].map(([id, { codes: causeCodes, miss }]) => ({
-    id,
-    title: vehicle.causes[id].title,
-    component: vehicle.causes[id].component,
-    probability: round(1 - miss),
-    codes: causeCodes,
-    steps: vehicle.causes[id].steps,
-  }));
+  // Una causa referenciada pero sin definir se informa igual, sin inventar datos.
+  const causes = [...byCause].map(([id, { codes: causeCodes, miss }]) => {
+    const def = vehicle.causes[id];
+    return {
+      id,
+      title: def?.title ?? id,
+      component: def?.component ?? id,
+      probability: round(1 - miss),
+      codes: causeCodes,
+      steps: def?.steps ?? [],
+    };
+  });
   causes.sort((a, b) => b.probability - a.probability || (a.id.localeCompare(b.id)));
 
   return {
