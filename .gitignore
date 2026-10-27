@@ -1,0 +1,20 @@
+# Dependencias y salidas
+node_modules/
+*.log
+
+# Secretos
+.env
+.env.*
+
+# Sistema operativo
+.DS_Store
+Thumbs.db
+
+# Editores
+.idea/
+.vscode/
+
+# Herramientas de agentes (generadas localmente)
+.atl/
+.codegraph/
+.claude/settings.local.json
